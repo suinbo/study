@@ -1,2 +1,2 @@
 # study
-개인 학습
+1. you don't know JS
