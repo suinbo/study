@@ -37,7 +37,7 @@
 
 -   특수 숫자
 
-    -   NaN : '유효하지 않은 숫자', 경계 값의 일종, 숫자 집합 내 특별한 종류읭 에러 상황
+    -   NaN : '유효하지 않은 숫자', 경계 값의 일종, 숫자 집합 내 특별한 종류의 에러 상황
 
         ```
         var a = 2 / "foo" // NaN
@@ -64,3 +64,58 @@
             Number.isNaN(a) // true
             Number.isNaN(b) // false
             ```
+
+-   Infinity
+
+    -   0으로 나누었을 때 결괏값 : Infinity(Number.POSITIVE_INFINITY), -Infinity(Number.NEGATIVE_INFINITY)
+    -   무한대/무한대 : 정의되지 않은 연산 (결괏값: NaN)
+
+-   0
+
+    -   자바스크립트의 +0, -0
+    -   -0 을 문자열화(Stringfy) 하면 항상 "0", 반대로 (문자열 -> 숫자) 하면 -0
+
+    ```
+    var a = 0 / -3
+    a // -0 => 일부 브라우저에 한해 제대로 표시
+
+    /* 명세에서는 -0을 문자열화 하면 "0" ('진짜 값을 감춤') */
+    a.toString()  // "0"
+    a + "" // "0"
+    String(a) // "0"
+    JSON.stringfy(a) // "0"
+
+    /* 문자열에서 숫자로 바꾸면 -0 */
+    +"-0" // -0
+    Number("-0") // -0
+    JSON.parse("-0") // -0
+    ```
+
+    -   비교 연산 결과도 -0 과 0 을 구분하지 못한다.
+
+    ```
+    var a = 0
+    var b = 0 / -3
+
+    a == b // true
+    -0 == 0 // true
+
+    a === b // true
+    -0 === 0 // true
+
+    0 > -0 // false
+    a > b // false
+    ```
+
+-   (ES6) 두 값이 절대적으로 동등한지 확인하는 유틸리티 : `Object.is()`
+
+    -   일반적으로는 == , === 를 사용
+
+    ```
+    var a = 2 / "foo"
+    var b = -3 * 0
+
+    Object.is(a, NaN) // true
+    Object.is(b, -0) // true
+    Object.is(b, 0) // false
+    ```
