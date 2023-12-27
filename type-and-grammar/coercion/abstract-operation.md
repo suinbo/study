@@ -44,14 +44,64 @@
             JSON.stringify(a) // "{"b":42}"
             ```
 
-        - JSON.stringify() 의 두번째 인자로 **배열 또는 함수(대체자)**를 전달하면, 객체를 재귀적으로 직렬화하며 필터링 함
+        - JSON.stringify() 의 두번째 인자로 **배열 또는 함수(= 대체자)**를 전달하면, 객체를 재귀적으로 직렬화하며 필터링 함
 
-            - 배열이라면 전체 원소는 문자열이여야 함
+            - 대체자가 배열이라면 (1)전체 원소는 문자열, (2)각 원소는 객체 직렬화의 대상 프로퍼티 명
+
+                ```
+                var a = {
+                    b: 42,
+                    c: "42",
+                    d: [1,2,3]
+                }
+
+                JSON.stringify(a, ["b", "c"]) // "{"b": 42, "c": "42"}"
+                ```
+
+            - 함수면 처음 한 번은 객체 자신에 대해, 그 다음은 객체 프로퍼티별로 한 번씩 실행 => 문자열화가 재귀적으로 이루어짐
+                ```
+                JSON.stringify(a, function(k,v) {
+                    if (k !== "c") retun v
+                })
+                // "{"b":42, "d": [1,2,3]}"
+                ```
 
 2. ToNumber
 
+    - `숫자 아닌 값 -> (수식 연산 가능한) 숫자` 변환
+
+        - true -> 1, false -> 0, undefined -> NaN, null -> 0
+        - 객체(배열)은 동등한 원시 값으로 변환 후 그 결과값을 ToNumber 규칙에 의해 강제변환
+
+            ```
+            var a = {
+                valueOf: function() {
+                    return "42"
+                }
+            }
+
+            var b = {
+                toString: function() {
+                    return "42"
+                }
+            }
+
+            var c = [4,2]
+            c.toString = function() {
+                return this.join("")
+            }
+
+            Number(a)  // 42
+            Number(b)  // 42
+            Number(c)  // 42
+            Number("") // 0
+            Number([]) // 0
+            Number(["abc"]) // NaN
+            ```
+
 3. ToBoolean
 
-    - Falsy 값
-    - Falsy 객체
-    - truthy 값
+    - Falsy 값 : 불리언으로 강제변환했을 때 false 인 값
+
+        - `undefined`, `null`, `false`, `+0, -0, NaN`, `""`
+        - Object -> true (강제변환)
