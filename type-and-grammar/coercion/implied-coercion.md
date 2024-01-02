@@ -118,5 +118,15 @@
             -   a 평가 결과가 truthy 일때만 foo() 호출, falsy 면 a && foo() 는 실행 멈춤
 
     -   심벌의 강제변환
+
         -   심벌 -> 문자 명시적 강제변환은 허용, 암시적 강제변환 에러
+
+            ```
+            var s1 = Symbol("응")
+            String(s1) // "String(s1)"
+
+            var s2 = Symbol("아니")
+            s2 + "" // TypeError
+            ```
+
         -   심벌 -> 불리언 값 명시적/암시적 강제변환 가능
