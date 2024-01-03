@@ -28,3 +28,14 @@
 
             a == b // false ("42" == 0 -> 재귀적으로 42 == 0 비교)
             ```
+
+        - `null`과 `undefined`는 상호 간 암시적인 강제변환
+
+            ```
+            var a = null
+            var b
+
+            a == b // true
+            a == null // true
+            b == null // true
+            ```
